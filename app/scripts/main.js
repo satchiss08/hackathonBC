@@ -30,7 +30,8 @@ require.config({
         bootstrap: '../../bower_components/bootstrap/dist/js/bootstrap.min',
         text: '../../bower_components/requirejs-text/text',
         router: 'routes/router',
-        viewHome: 'views/home'
+        viewHome: 'views/home',
+        viewSearch: 'views/search/search'
     }
 });
 
