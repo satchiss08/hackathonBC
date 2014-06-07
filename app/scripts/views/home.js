@@ -26,11 +26,22 @@ define([
 
         render: function(){
             self.$el.html(self.template);
-            $('#option1').draggable();
-            $('#option2').draggable();
-            $('#option3').draggable();
-            $('#option4').draggable();
-            $('#option5').draggable();
+            $('#option1').draggable({ revert: "invalid" });
+            $('#option2').draggable({ revert: "invalid" });
+            $('#option3').draggable({ revert: "invalid" });
+            $('#option4').draggable({ revert: "invalid" });
+            $('#option5').draggable({ revert: "invalid" });
+            $('#dropDiv').droppable({
+                activeClass: "ui-state-default",
+                hoverClass: "ui-state-hover",
+                drop: function(event, ui)
+                {
+                    /*$(this).css("background-color", "#00FFFF");*/
+                    var element = $(ui.draggable).detach();
+                    $('#dropDiv').append(element);
+                    $(element).css('left', 0);
+                }
+            });
         },
 
         dragDrop: function()
