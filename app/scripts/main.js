@@ -23,7 +23,7 @@ require.config({
         }
     },
     paths: {
-        jquery: '../../bower_components/jquery/dist/jquery.min',
+        jquery: '../../bower_components/jquery/dist/jquery',
         jqueryui: '../../bower_components/jquery/dist/jquery-ui-1.10.4.min',
         backbone: '../../bower_components/backbone/backbone',
         underscore: '../../bower_components/underscore/underscore',
