@@ -4710,36 +4710,34 @@ footer p {
 }
 
 #drag-drop-options{
-  width: 800px;
+  width: 585px;
   height: 200px;
   margin-right: auto;
-  margin-left: auto;
-  border-style: solid;
-  border-width: 1px;
 }
 
 #dragDiv{
   float: left;
-  width: 100px;
+  width: 90px;
   height: 200px;
   border-style: solid;
+  border-color: #1abc9c;
   border-width: 3px;
-  margin-left: 30px;
+  margin-left: 50px;
 }
 
-#label-margin{
+#label-margin-drag{
   text-align: center;
   margin-right: auto;
   margin-left: auto;
 }
 
 #dropDiv{
-  float: left;
-  width: 100px;
+  width: 90px;
   height: 200px;
   border-style: solid;
+  border-color: #1abc9c;
   border-width: 3px;
-  margin-left: 500px;
+  margin-left: 200px;
 }
 
 #steps-container{
@@ -4762,4 +4760,18 @@ footer p {
   height: 200px;
   margin-left: 0px;
   /*margin-left: 600px;*/
+}
+
+#label-margin-drop{
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.item-option{
+  float: left;
+  display: table-row;
+  left: 0;
+  top: 0;
+  width: 50px;
+  margin-left: 5px;
 }

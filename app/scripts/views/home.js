@@ -11,6 +11,8 @@ define([
     'use strict';
 
     var self;
+    var price;
+    var genre;
 
          var HomeView = Backbone.View.extend({
         el: $('#container'),
@@ -38,33 +40,42 @@ define([
             $('#dropDiv').droppable({
                 activeClass: "ui-state-default",
                 hoverClass: "ui-state-hover",
+                accept: ":not(.ui-sortable-helper)",
                 drop: function(event, ui)
                 {
-                    /*$(this).css("background-color", "#00FFFF");*/
                     var element = $(ui.draggable).detach();
-                    $('#dropDiv').append(element);
-                    $(element).css('left', 0);
+                    $('#label-margin-drop').append(element);
+                    $(element).css('left', 0).css('top', 0);
+
+
+                    /*$( this ).find( ".placeholder" ).remove();
+                    $( "#label-margin-drop" ).text( ui.draggable.text() ).appendTo( this );*/
                 }
-            });
+            }).sortable({
+                  items: "label",
+                  sort: function() {
+                    // gets added unintentionally by droppable interacting with sortable
+                    // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+                    $( this ).removeClass( "ui-state-default" );
+                  }
+                });
         },
 
-        dataSent: function()
+        dataSent: function(event, ui)
         {
             var data = [];
-            var price = $('#inpPrice').val();
-            data.push(price);
+            price = $('#inpPrice').val();
+
+            var lista=document.getElementById('label-margin-drop');
 
             if($("input[name = optionsRadios]:checked").val()){
-                data.push($('[name="optionsRadios"]:checked').attr('value'));
+                genre = $('[name="optionsRadios"]:checked').attr('value');
             }
+       
+            alert(lista.childNodes[1].id);
+            alert(price);
+            alert(genre);
 
-            
-            if($('#dropDiv').find("#option1").length){
-                data.push("Jackets");
-            }else{
-                alert('NO');
-            }
-            alert(data);
         }
     });
 
