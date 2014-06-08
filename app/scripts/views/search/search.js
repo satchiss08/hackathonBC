@@ -23,7 +23,7 @@ define([
         initialize: function(){
             self = this;
             normalizedProducts = [];
-            self.searchProducts("shirts");
+            self.searchProducts('shirts black women', 'salePriceUS%3A%5B*+TO+25%5D');
         },
 
         template : _.template(Template),
@@ -32,16 +32,27 @@ define([
             self.$el.html(self.template);
         },
 
-        searchProducts: function(query){
-            var url = 'http://hackathon.backcountry.com:8081/hackathon/public/product/v1/products';
+        shirtsQuery: {'q': 'shirts black men', 'filterQueries': 'salePriceUS%3A%5B*+TO+25%5D'},
 
+        pantsQuery: {'q': 'pants black men', 'filterQueries': 'salePriceUS%3A%5B*+TO+25%5D'},
+
+        shoesQuery: {'q': 'shoes black men', 'filterQueries': 'salePriceUS%3A%5B*+TO+25%5D'},
+
+        searchProducts: function(hints, priceFilter){
+            var url = 'http://localhost:3000/combo';
             $.ajax({
               url: url,
               type: 'GET',
-              data: {'q':query, 'site': 'bcs'},
               dataType: 'jsonp',
-              success: function(response){
-                self.normalizeProductArray(response.products);
+              data: {
+                'shirts': 'q=' + self.shirtsQuery.q + '&filterQueries=' + self.shirtsQuery.filterQueries,
+                'pants': 'q=' + self.pantsQuery.q + '&filterQueries' + self.pantsQuery.filterQueries,
+                'shoes': 'q=' + self.shoesQuery.q + '&filterQueries' + self.shoesQuery.filterQueries
+                // 'q':hints, 'filterQueries': priceFilter
+              },
+              success: function(data){
+                // self.normalizeProductArray(response.products);
+                console.log(data);
               },
               error : function(e){
                 console.log(e);
@@ -61,7 +72,8 @@ define([
                 });
                 normalizedProducts.push(product);
             }
-            console.log(normalizedProducts);
+            //console.log(normalizedProducts);
+            
         }
     });
 
