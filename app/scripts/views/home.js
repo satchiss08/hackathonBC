@@ -19,7 +19,12 @@ define([
 
         events:
         {
-            'click #btnSent': 'dataSent'
+            'click #btnSent': 'dataSent',
+            'click .item-option': 'priceSelected'
+        },
+
+        priceSelected: function(event){
+            console.log(event.target.id);
         },
 
         initialize: function(){
@@ -29,6 +34,26 @@ define([
         },
 
         template : _.template(Template),
+
+
+        addDropDownDiv: function(idItem){
+            $('#dropDownOps').append('<div class="col-xs-3">'+
+            '<div class="dropdownPrices-2">'+
+            '<select id="' + idItem + '" name="pricesList1" value="Prices-Shirts" class="select-block">'+
+                '<option id="salePriceUS%3A%5B*+TO+25%5D" value="0">Under $25</option>'+
+                '<option id="salePriceUS%3A%5B25+TO+50%5D" value="1">$25 to $50</option>'+
+                '<option id="salePriceUS%3A%5B50+TO+75%5D" value="2">$50 to $75</option>'+
+                '<option id="salePriceUS%3A%5B75+TO+100%5D" value="3">$75 to $100</option>'+
+                '<option id="salePriceUS%3A%5B100+TO+125%5D" value="4">$100 to $125</option>'+
+                '<option id="salePriceUS%3A%5B125+TO+150%5D" value="5">$125 to $150</option>'+
+                '<option id="salePriceUS%3A%5B150+TO+200%5D" value="6">$150 to $200</option>'+
+                '<option id="salePriceUS%3A%5B200+TO+250%5D" value="7">$200 to $250</option>'+
+                '<option id="salePriceUS%3A%5B300+TO+400%5D" value="8">$300 to $400</option>'+
+                '<option id="salePriceUS%3A%5B400+TO+500%5D" value="9">$400 to $500</option>'+
+              '</select>'+
+            '</div>'+
+          '</div>');
+        },
 
         render: function(){
             self.$el.html(self.template);
@@ -46,10 +71,10 @@ define([
                     var element = $(ui.draggable).detach();
                     $('#label-margin-drop').append(element);
                     $(element).css('left', 0).css('top', 0);
+                    console.log(element[0].id);
+                    self.addDropDownDiv($(ui.draggable).attr('id'));
 
-
-                    /*$( this ).find( ".placeholder" ).remove();
-                    $( "#label-margin-drop" ).text( ui.draggable.text() ).appendTo( this );*/
+                    $('.dropdownPrices-3').toggle('show');
                 }
             }).sortable({
                   items: "label",
@@ -77,7 +102,12 @@ define([
             alert(genre);
 
         }
+
     });
 
     return HomeView;
 });
+
+
+/* Drag and Drop*/
+

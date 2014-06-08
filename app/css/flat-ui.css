@@ -4732,6 +4732,7 @@ footer p {
 }
 
 #dropDiv{
+  float: left;
   width: 90px;
   height: 200px;
   border-style: solid;
@@ -4775,3 +4776,8 @@ footer p {
   width: 50px;
   margin-left: 5px;
 }
+
+.hidden-dropdown{
+  display: none;
+}
+
