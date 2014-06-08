@@ -49,18 +49,40 @@
         </h1>
       </div> <!-- /demo-headline -->
 
-      <h1 class="demo-section-title">Step 1: </h1>
-      <h3 class="demo-panel-title">Set the price for the combo that you want</h3>
+      <div id="steps-container">
+        <div id="step-one">
+          <h1 class="demo-section-title">Step 1: </h1>
+          <h3 class="demo-panel-title">Set the price for the combo that you want</h3>
 
-      <div class="row">
-        <div class="col-xs-3">
-          <div class="form-group">
-            <input type="text" value="" placeholder="Inactive" class="form-control" />
-          </div>          
+          <div class="row">
+            <div class="col-xs-3">
+              <div class="form-group">
+                <input id="inpPrice" type="text" value="" placeholder="Inactive" class="form-control" />
+              </div>          
+            </div>
+          </div> <!-- /row -->
         </div>
-      </div> <!-- /row -->
 
-      <h1 class="demo-section-title">Step 2: </h1>
+        <div id="step-two">
+          <h1 class="demo-section-title">Step 2: </h1>
+          <h3 class="demo-panel-title">Choose your genre</h3>
+
+          <div>
+            <label class="radio">
+              <input type="radio" name="optionsRadios" id="optionsRadios1" value="Femenine" data-toggle="radio">
+              Femenine
+            </label>
+            <label class="radio">
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="Masculine" data-toggle="radio">
+              Masculine
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <h1 class="demo-section-title">Step 3: </h1>
       <h3 class="demo-panel-title">Choose the products by priority to create the combo</h3>
 
       <div id="drag-drop-options">
@@ -77,8 +99,13 @@
         <div id="dropDiv">
         </div>
       </div>
-
     </div> <!-- /container -->
+
+    <div class="row demo-row">
+      <div id="combo-boton">
+        <a id="btnSent" href="#fakelink" class="btn btn-block btn-lg btn-primary">Combo!</a>
+      </div>
+    </div> <!-- /row -->
 
     <footer>
       <div class="container">

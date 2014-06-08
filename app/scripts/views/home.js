@@ -15,6 +15,10 @@ define([
          var HomeView = Backbone.View.extend({
         el: $('#container'),
 
+        events:
+        {
+            'click #btnSent': 'dataSent'
+        },
 
         initialize: function(){
             self = this;
@@ -44,10 +48,23 @@ define([
             });
         },
 
-        dragDrop: function()
+        dataSent: function()
         {
-            var fff = $('#option1');
-            fff.draggable();
+            var data = [];
+            var price = $('#inpPrice').val();
+            data.push(price);
+
+            if($("input[name = optionsRadios]:checked").val()){
+                data.push($('[name="optionsRadios"]:checked').attr('value'));
+            }
+
+            
+            if($('#dropDiv').find("#option1").length){
+                data.push("Jackets");
+            }else{
+                alert('NO');
+            }
+            alert(data);
         }
     });
 

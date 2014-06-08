@@ -4741,3 +4741,25 @@ footer p {
   border-width: 3px;
   margin-left: 500px;
 }
+
+#steps-container{
+  width: 1170px;
+  height: 200px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#step-one{
+  float: left;
+  width: 585px;
+  height: 200px;
+}
+
+
+#step-two{
+  float: left;
+  width: 585px;
+  height: 200px;
+  margin-left: 0px;
+  /*margin-left: 600px;*/
+}
