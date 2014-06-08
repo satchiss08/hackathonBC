@@ -4723,6 +4723,7 @@ footer p {
   border-color: #1abc9c;
   border-width: 3px;
   margin-left: 50px;
+  border-radius: 8px;
 }
 
 #label-margin-drag{
@@ -4739,6 +4740,7 @@ footer p {
   border-color: #1abc9c;
   border-width: 3px;
   margin-left: 200px;
+  border-radius: 8px;
 }
 
 #steps-container{

@@ -17,13 +17,19 @@ define([
     var self;
     var price;
     var genre;
+    var actualCombo = 0;
+    var combosLength = 0; 
+    var combosTotales;
 
          var HomeView = Backbone.View.extend({
         el: $('#container'),
 
         events:
         {
-            'click #btnSent': 'requestCombos'
+            'click #btnSent': 'requestCombos',
+            'click #btnNext': 'loadNextCombo',
+            'click #btnPrevious': 'loadPreviousCombo',
+            'click button#nextCombo': 'loadNextCombo'
         },
 
         priceSelected: function(event){
@@ -45,26 +51,27 @@ define([
             $('#dropDownOps').append('<div class="col-xs-3">'+
             '<div class="dropdownPrices-2">'+
             '<select id="' + idItem + 'Price' +'" name="pricesList1" value="Prices-Shirts" class="select-block">'+
-                '<option id="salePriceUS%3A%5B*+TO+25%5D" value="0">Under $25</option>'+
-                '<option id="salePriceUS%3A%5B25+TO+50%5D" value="1">$25 to $50</option>'+
-                '<option id="salePriceUS%3A%5B50+TO+75%5D" value="2">$50 to $75</option>'+
-                '<option id="salePriceUS%3A%5B75+TO+100%5D" value="3">$75 to $100</option>'+
-                '<option id="salePriceUS%3A%5B100+TO+125%5D" value="4">$100 to $125</option>'+
-                '<option id="salePriceUS%3A%5B125+TO+150%5D" value="5">$125 to $150</option>'+
-                '<option id="salePriceUS%3A%5B150+TO+200%5D" value="6">$150 to $200</option>'+
-                '<option id="salePriceUS%3A%5B200+TO+250%5D" value="7">$200 to $250</option>'+
-                '<option id="salePriceUS%3A%5B300+TO+400%5D" value="8">$300 to $400</option>'+
-                '<option id="salePriceUS%3A%5B400+TO+500%5D" value="9">$400 to $500</option>'+
+                '<option id="salePriceUS%3A%5B*+TO+25%5D" value="25">Under $25</option>'+
+                '<option id="salePriceUS%3A%5B25+TO+50%5D" value="50">$25 to $50</option>'+
+                '<option id="salePriceUS%3A%5B50+TO+75%5D" value="75">$50 to $75</option>'+
+                '<option id="salePriceUS%3A%5B75+TO+100%5D" value="100">$75 to $100</option>'+
+                '<option id="salePriceUS%3A%5B100+TO+125%5D" value="125">$100 to $125</option>'+
+                '<option id="salePriceUS%3A%5B125+TO+150%5D" value="150">$125 to $150</option>'+
+                '<option id="salePriceUS%3A%5B150+TO+200%5D" value="200">$150 to $200</option>'+
+                '<option id="salePriceUS%3A%5B200+TO+250%5D" value="250">$200 to $250</option>'+
+                '<option id="salePriceUS%3A%5B300+TO+400%5D" value="400">$300 to $400</option>'+
+                '<option id="salePriceUS%3A%5B400+TO+500%5D" value="500">$400 to $500</option>'+
               '</select>'+
               '<select id="' + idItem + 'Color' + '" name="colorsList1" class="select-block" style="margin-left: 20px;">'+
-                '<option id="black" style="background:black;">black</option>'+
-                '<option id="red" style="background:red;">red</option>'+
-                '<option id="green" style="background:green;">green</option>'+
-                '<option id="blue" style="background:blue;">blue</option>'+
-                '<option id="white" style="background:white;">white</option>'+
-                '<option id="yellow" style="background:yellow;">yellow</option>'+
-                '<option id="gray" style="background:gray;">gray</option>'+
-                '<option id="pink" style="background:pink;">pink</option>'+
+                '<option id="colorFamily%3Ablack" style="background:black;">black</option>'+
+                '<option id="colorFamily%3Ared" style="background:red;">red</option>'+
+                '<option id="colorFamily%3Agreen" style="background:green;">green</option>'+
+                '<option id="colorFamily%3Ablue" style="background:blue;">blue</option>'+
+                '<option id="colorFamily%3Awhite" style="background:white;">white</option>'+
+                '<option id="colorFamily%3Ayellow" style="background:yellow;">yellow</option>'+
+                '<option id="colorFamily%3Agray" style="background:gray;">gray</option>'+
+                '<option id="colorFamily%3Abrown" style="background:brown;">brown</option>'+
+                '<option id="colorFamily%3Apink" style="background:pink;">pink</option>'+
               '</select>'+
             '</div>'+
           '</div>');
@@ -121,14 +128,20 @@ define([
 
         },
 
-        shirtsQuery: {'q': '', 'filterQueries': ''},
+        // shirtsQuery: {'q': '', 'filterQueries': ''},
 
-        pantsQuery: {'q': '', 'filterQueries': ''},
+        // pantsQuery: {'q': '', 'filterQueries': ''},
 
-        shoesQuery: {'q': '', 'filterQueries': ''},
+        // shoesQuery: {'q': '', 'filterQueries': ''},
+
+        shirtsQuery: {'q': 'shirts black men', 'filterQueries': 'salePriceUS%3A%5B*+TO+25%5D'},
+
+        pantsQuery: {'q': 'pants black men', 'filterQueries': 'salePriceUS%3A%5B*+TO+25%5D'},
+
+        shoesQuery: {'q': 'shoes black men', 'filterQueries': 'salePriceUS%3A%5B*+TO+25%5D'},
 
         searchProducts: function(){
-            var url = 'http://localhost:3000/combo';
+            var url = 'http://10.50.31.116:3000/combo';
             $.ajax({
               url: url,
               type: 'GET',
@@ -140,12 +153,48 @@ define([
               },
               success: function(data){
                 // self.normalizeProductArray(response.products);
+                combosTotales = data;
+                combosLength = data.length;
+                self.showComboResponse(data, 0);
                 console.log(data);
               },
               error : function(e){
                 console.log(e);
               }
             });
+        },
+
+        loadPreviousCombo: function(){
+            if(actualCombo > 0){
+                actualCombo -= 1;
+                self.showComboResponse(combosTotales, actualCombo);
+            }
+        },
+
+        loadNextCombo: function(){
+            if(actualCombo < combosLength -1){
+                actualCombo += 1;
+                self.showComboResponse(combosTotales, actualCombo);
+            }
+        },
+
+        showComboResponse: function(combosArray, index){
+            $('#shirtImage').css('background-image', 'url(http://www.backcountry.com/' + combosArray[index].shirt.image + ')');
+            $('#shirtDescription').text(combosArray[index].shirt.description);
+            $('#shirtBrand').text(combosArray[index].shirt.brand);
+            $('#shirtPrice').text(combosArray[index].shirt.price);
+
+            $('#pantImage').css('background-image', 'url(http://www.backcountry.com/' + combosArray[index].pant.image + ')');   
+            $('#pantDescription').text(combosArray[index].pant.description);
+            $('#pantBrand').text(combosArray[index].pant.brand);
+            $('#pantPrice').text(combosArray[index].pant.price); 
+            
+            $('#shoesImage').css('background-image', 'url(http://www.backcountry.com/' + combosArray[index].shoes.image + ')');   
+            $('#shoesDescription').text(combosArray[index].shoes.description);
+            $('#shoesBrand').text(combosArray[index].shoes.brand);
+            $('#shoesPrice').text(combosArray[index].shoes.price); 
+
+            self.showCombos();         
         },
 
         normalizeProductArray: function(products){
@@ -165,41 +214,63 @@ define([
         },
 
         requestCombos: function(){
-
+            actualCombo = 0;
+            var totalPrice = 0;
             if($("input[name = optionsRadios]:checked").val()){
                 genre = $('[name="optionsRadios"]:checked').attr('value');
-                price = $('#inpPrice').val();
+                price = parseFloat($('#inpPrice').val());
 
-                var lista=$('#label-margin-drop').children('.item-option'),
-                    colors=$('#label-margin-drop').children('.item-option'),
-                    price=$('#label-margin-drop').children('.item-option');
+
+
+                var lista=$('#label-margin-drop')[0].children,
+                    colors;
 
                 $(lista).each(function(index, item){
                     // console.log($(item).text());
                     if($(item).text()==='Shirts'){
-                        self.shirtsQuery.q = 'shirts ' + $('#'+$(item).attr("id")+'Color').val() + ' ' + genre;
-                        self.shirtsQuery.filterQueries = 'filterQueries=' + $('#'+$(item).attr("id")+'Price').children(":selected").attr("id");
+                        console.log(self.shirtsQuery);
+                        // self.shirtsQuery.q = 'shirts ' + $('#'+$(item).attr("id")+'Color').children(":selected").attr("id") + ' ' + genre;
+                        // self.shirtsQuery.filterQueries = $('#'+$(item).attr("id")+'Price').children(":selected").attr("id") ;
+
+                        self.shirtsQuery.q = 'shirts ' + ' ' + genre;
+                        self.shirtsQuery.filterQueries = $('#'+$(item).attr("id")+'Price').children(":selected").attr("id") + "%7C" + $('#'+$(item).attr("id")+'Color').children(":selected").attr("id");
+                        totalPrice += parseFloat($('#'+$(item).attr("id")+'Price').children(":selected").attr("value"));
+                        console.log(self.shirtsQuery);
                     }
                     else{
-                         if($(item).text()==='Pants'){
-                            self.pantsQuery.q = 'pants ' + $('#'+$(item).attr("id")+'Color').val() + ' ' + genre;
-                            self.pantsQuery.filterQueries = 'filterQueries=' + $('#'+$(item).attr("id")+'Price').children(":selected").attr("id");
+                         if($(item).text()==='Jeans'){
+                            console.log(self.pantsQuery);
+                            // self.pantsQuery.q = 'pants ' + $('#'+$(item).attr("id")+'Color').children(":selected").attr("id") + ' ' + genre;
+                            // self.pantsQuery.filterQueries = $('#'+$(item).attr("id")+'Price').children(":selected").attr("id");
+
+
+                            self.pantsQuery.q = 'jeans ' + ' ' + genre;
+                            self.pantsQuery.filterQueries = $('#'+$(item).attr("id")+'Price').children(":selected").attr("id") + "%7C" + $('#'+$(item).attr("id")+'Color').children(":selected").attr("id");
+                            totalPrice += parseFloat($('#'+$(item).attr("id")+'Price').children(":selected").attr("value"));
+                            console.log(self.pantsQuery);
                         }
                         else{
-                            self.shoesQuery.q = 'shoes ' + $('#'+$(item).attr("id")+'Color').val() + ' ' + genre;
-                            self.shoesQuery.filterQueries = 'filterQueries=' + $('#'+$(item).attr("id")+'Price').children(":selected").attr("id");
+                            console.log(self.shoesQuery);
+                            // self.shoesQuery.q = 'shoes ' + $('#'+$(item).attr("id")+'Color').children(":selected").attr("id") + ' ' + genre;
+                            // self.shoesQuery.filterQueries =  $('#'+$(item).attr("id")+'Price').children(":selected").attr("id");
+
+                            self.shoesQuery.q = 'shoes ' + ' ' + genre;
+                            self.shoesQuery.filterQueries = $('#'+$(item).attr("id")+'Price').children(":selected").attr("id") + "%7C" + $('#'+$(item).attr("id")+'Color').children(":selected").attr("id");
+                            totalPrice += parseFloat($('#'+$(item).attr("id")+'Price').children(":selected").attr("value"));
+                            console.log(self.shoesQuery);
                         }
                     }
-
-                    console.log("Shirts");
-                    console.log(self.shirtsQuery);
-                    console.log("Pants");
-                    console.log(self.pantsQuery);
-                    console.log("Shoes");
-                    console.log(self.shoesQuery);
-
-                    self.searchProducts();
                 });
+
+                if(price >= totalPrice){
+                    self.searchProducts();
+                }
+                else{
+                    if(confirm("Your budget is not enough\n- OK to generate combos\n- Cancel to close")){
+                        self.searchProducts();
+                    }
+                }
+
             }
             else{
                 alert("You have not selected filters yet");
@@ -209,11 +280,13 @@ define([
 
         showCombos: function(){
 
-            $('#viewCombos').draggable().show();
+            $('#viewCombos').show().draggable();
             $(document).mouseup(function (e){
                 var container = $("div#viewCombos");
                 if (!container.is(e.target) // if the target of the click isn't the container...
-                    && container.has(e.target).length === 0) // ... nor a descendant of the container
+                    && container.has(e.target).length === 0
+                    && $(e.target).attr("id") !== 'btnNext'
+                    && $(e.target).attr("id") !== 'btnPrevious') // ... nor a descendant of the container
                 {
                     container.hide();
                 }
